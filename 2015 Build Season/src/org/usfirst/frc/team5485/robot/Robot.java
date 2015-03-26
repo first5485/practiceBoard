@@ -33,7 +33,7 @@ public class Robot extends SampleRobot {
 	CANTalon driveRight = new CANTalon(1);
 	CANTalon driveLeft = new CANTalon(3);
 
-	Jaguar liftJag = new Jaguar(2);
+	CANTalon liftCan = new CANTalon(2);
 
 	DigitalInput switchDown = new DigitalInput(0);
 	DigitalInput switchUp = new DigitalInput(1);
@@ -49,8 +49,8 @@ public class Robot extends SampleRobot {
 	 */
 	public void autonomous() {
 		myRobot.setSafetyEnabled(false);
-		myRobot.drive(-0.5, 0.0); // drive forwards half speed
-		Timer.delay(2.0); // for 2 seconds
+		myRobot.drive(0.75, 0.0); // drive forwards 3/4 speed
+		Timer.delay(5.0); // for 5 seconds
 		myRobot.drive(0.0, 0.0); // stop robot
 	}
 
@@ -63,7 +63,7 @@ public class Robot extends SampleRobot {
 		boolean down = false;
 		while (isOperatorControl() && isEnabled()) {
 			// myRobot.tank(stick); // drive with arcade style (use right stick)
-			myRobot.tankDrive(stick.getRawAxis(1), stick.getRawAxis(5)); // drive
+			myRobot.tankDrive(-1*stick.getRawAxis(1), -1*stick.getRawAxis(5)); // drive
 																			// with
 																			// arcade
 																			// style
@@ -74,34 +74,34 @@ public class Robot extends SampleRobot {
 
 			// UP
 			if (stick.getRawButton(4)) {
-				if (switchUp.get()) {
-					System.err.println("Up done");
-					liftJag.stopMotor();
-					up = false;
-				} else {
+//				if (switchUp.get()) {
+//					System.err.println("Up done");
+//					liftCan.set(0);
+//					up = false;
+//				} else {
 					System.err.println("Up signaled");
-					liftJag.set(1.0);
+					liftCan.set(1.0);
 					up = true;
-				}
+//				}
 			} else if (up) {
-				liftJag.stopMotor();
+				liftCan.set(0);
 				up = false;
 			}
 
 			// DOWN
 			if (stick.getRawButton(1)) {
-				if (switchDown.get()) {
-					System.err.println("Down done");
-					liftJag.stopMotor();
-					down = false;
-				} else {
+//				if (switchDown.get()) {
+//					System.err.println("Down done");
+//					liftCan.set(0);
+//					down = false;
+//				} else {
 					System.err.println("Down signaled");
-					liftJag.set(-1.0);
+					liftCan.set(-1.0);
 					down = true;
-				}
+//				}
 			} else {
 				if (down) {
-					liftJag.stopMotor();
+					liftCan.set(0);
 					down = false;
 				}
 			}
